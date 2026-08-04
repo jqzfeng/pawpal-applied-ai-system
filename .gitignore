@@ -1,5 +1,13 @@
-__pycache__/
 .venv/
-.venv_new/
+venv/
+__pycache__/
+*.py[cod]
 .pytest_cache/
+.coverage
+htmlcov/
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
 .DS_Store
+*.log

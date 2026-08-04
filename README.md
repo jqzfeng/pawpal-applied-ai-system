@@ -1,164 +1,179 @@
-# PawPal+ (Module 2 Project)
+# PawPal+ AI Dog Care Guide
 
-You are building **PawPal+**, a Streamlit app that helps a pet owner plan care tasks for their pet.
+## Title and Summary
 
-## Scenario
+PawPal+ combines the original rule-based care scheduler with a dog-only AI care assistant. The assistant answers basic questions about feeding, food safety, exercise, bathing, grooming, dental care, and enrichment. It retrieves relevant information from a curated local knowledge base and gives that context to a large language model (LLM), helping the system produce grounded answers with visible sources.
 
-A busy pet owner needs help staying consistent with pet care. They want an assistant that can:
+This project matters because dog owners often need quick, understandable routine-care guidance. PawPal+ makes general information easier to access while using guardrails to redirect emergency and medication questions to a veterinarian.
 
-- Track pet care tasks (walks, feeding, meds, enrichment, grooming, etc.)
-- Consider constraints (time available, priority, owner preferences)
-- Produce a daily plan and explain why it chose that plan
+## Original Project
 
-Your job is to design the system first (UML), then implement the logic in Python, then connect it to the Streamlit UI.
+The original project was **PawPal+ (Module 2 Project)**, an object-oriented pet-care scheduling application. It represented owners, pets, tasks, time windows, and daily plans through Python classes and used deterministic scheduling logic to prioritize tasks, detect simple conflicts, and create recurring care tasks.
 
-## What you will build
+This final project extends that scheduler with an AI-powered, retrieval-augmented dog-care guide. The original scheduling classes remain the reliable rule-based layer, while the new AI feature supports everyday dog-care questions.
 
-Your final app should:
+## Main AI Feature: Retrieval-Augmented Generation (RAG)
 
-- Let a user enter basic owner + pet info
-- Let a user add/edit tasks (duration + priority at minimum)
-- Generate a daily schedule/plan based on constraints and priorities
-- Display the plan clearly (and ideally explain the reasoning)
-- Include tests for the most important scheduling behaviors
+PawPal+ uses a small local dog-care knowledge base and a transparent retrieval process:
 
-## Getting started
+1. The user enters a dog profile and a care question.
+2. Input guardrails check for emergencies, medication-dose requests, and empty input.
+3. The retriever selects the most relevant dog-care records from the local knowledge base.
+4. The retrieved records, dog profile, and question are added to the LLM prompt.
+5. The LLM generates a short answer grounded in the retrieved context.
+6. PawPal+ displays the answer, sources, and a veterinary disclaimer.
 
-### Setup
+The retrieved information meaningfully changes the prompt and the resulting answer; it is not merely printed beside a generic response.
+
+## Supported Topics
+
+- Feeding routines
+- General food safety
+- Exercise and walking
+- Bathing and grooming
+- Dental care
+- Nail care
+- Hydration
+- Mental enrichment
+- General preventive-care reminders
+
+PawPal+ supports dogs only. It does not diagnose illness, prescribe treatment, or determine medication dosage.
+
+## Architecture Overview
+
+The system diagram is stored as Mermaid source at [`diagrams/system_architecture.mmd`](diagrams/system_architecture.mmd). The application separates the reliable rule-based scheduler from the AI care guide. Within the AI flow, guardrails screen the input first, the retriever selects local evidence, and the LLM produces a grounded response. Automated tests and structured human evaluation check the system, while the user reviews every answer before acting on it.
+
+The original OOP class diagram is stored at [`diagrams/uml_final.mmd`](diagrams/uml_final.mmd).
+
+## Project Structure
+
+```text
+.
+├── app.py                         # Streamlit interface
+├── main.py                        # Original scheduler CLI demo
+├── pawpal_system.py               # Original OOP scheduler
+├── ai_assistant.py                # Guardrails, retrieval, and LLM call
+├── knowledge_base.json            # Curated dog-care records
+├── requirements.txt               # Python dependencies
+├── tests/                          # Automated tests
+├── diagrams/
+│   ├── system_architecture.mmd     # Final AI system diagram
+│   └── uml_final.mmd               # Original OOP class diagram
+├── docs/
+│   └── evaluation_results.md       # Parseable human evaluation
+├── model_card.md                   # Responsible-AI reflection
+└── README.md
+```
+
+The RAG backend, Streamlit interface, knowledge base, tests, diagrams, and documentation in this structure are implemented in the current project package.
+
+## Setup Instructions
+
+### 1. Clone the repository
+
+```bash
+git clone YOUR_REPOSITORY_URL
+cd YOUR_REPOSITORY_FOLDER
+```
+
+### 2. Create and activate a virtual environment
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+source .venv/bin/activate
+```
+
+On Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-### Suggested workflow
+### 4. Configure the LLM API key
 
-1. Read the scenario carefully and identify requirements and edge cases.
-2. Draft a UML diagram (classes, attributes, methods, relationships).
-3. Convert UML into Python class stubs (no logic yet).
-4. Implement scheduling logic in small increments.
-5. Add tests to verify key behaviors.
-6. Connect your logic to the Streamlit UI in `app.py`.
-7. Refine UML so it matches what you actually built.
+Export the environment variable required by the selected LLM provider. Do not commit API keys to GitHub.
 
-## 🖥️ Sample Output
-
-Verified by running the demo script in the terminal:
-
-```text
-Today's Schedule
-====================
-- 08:00 - 08:30 : Morning walk (30 min)
-- 08:30 - 08:40 : Feeding (10 min)
-- 08:40 - 09:00 : Grooming (20 min)
-- 09:00 - 09:15 : Play time (15 min)
+```bash
+export OPENAI_API_KEY="your-api-key"
 ```
 
-## 🧪 Testing PawPal+
+### 5. Run the application
 
-Run the full test suite with:
+```bash
+streamlit run app.py
+```
+
+### 6. Run automated tests
 
 ```bash
 python -m pytest
 ```
 
-These tests check the core scheduling behavior of PawPal+, including:
+## Sample Interactions
 
-- task sorting and ordering
-- recurring task behavior for daily and weekly care items
-- conflict detection for overlapping task times
-- basic pet and owner task management
+The following are target interactions for the final implementation. Replace them with copied outputs from the running application before submission if the wording changes.
 
-Example test run:
+### Example 1: Feeding routine
 
-```text
-============================= test session starts ==============================
-platform darwin -- Python 3.13.0, pytest-7.4.1, pluggy-1.0
-rootdir: /Users/qiuzifeng/Desktop/CodePath 2026/ai110-module2show-pawpal-starter
-collected 12 items
+**Input:** `How often should I feed my adult dog?`
 
-tests/test_pawpal.py::test_mark_complete_changes_task_status PASSED
-tests/test_pawpal.py::test_adding_task_increases_pet_task_count PASSED
-tests/test_pawpal_system.py::test_task_can_be_marked_complete PASSED
-tests/test_pawpal_system.py::test_pet_tracks_and_filters_tasks PASSED
-tests/test_pawpal_system.py::test_owner_collects_tasks_from_all_pets PASSED
-tests/test_pawpal_system.py::test_scheduler_organizes_pending_tasks_across_pets PASSED
-tests/test_pawpal_system.py::test_scheduler_can_sort_tasks_by_time_of_day PASSED
-tests/test_pawpal_system.py::test_scheduler_can_filter_tasks_by_completion_and_pet_name PASSED
-tests/test_pawpal_system.py::test_mark_complete_creates_next_occurrence_for_daily_task PASSED
-tests/test_pawpal_system.py::test_pet_tracks_next_occurrence_when_recurring_task_is_completed PASSED
-tests/test_pawpal_system.py::test_scheduler_reports_conflict_warning_for_overlapping_tasks PASSED
-tests/test_pawpal_system.py::test_sort_by_time_returns_tasks_in_chronological_order PASSED
-tests/test_pawpal_system.py::test_mark_complete_creates_a_new_task_for_the_following_day PASSED
-tests/test_pawpal_system.py::test_scheduler_flags_duplicate_times_as_conflicts PASSED
+**Expected output:** Adult dogs are commonly fed on a consistent schedule, often divided into two meals per day. Exact needs depend on the dog's size, activity, health, and the calorie content of the food. Follow the food label and your veterinarian's advice.
 
-============================== 12 passed in 0.02s ==============================
-```
+**Expected source:** Curated dog-feeding guidance in the local knowledge base.
 
-Confidence Level: ★★★★★
+### Example 2: Exercise
 
-The scheduler logic is currently well covered for its core behaviors, and the passing test run gives strong confidence in the reliability of the planning and recurrence features.
+**Input:** `How much exercise does my senior dog need?`
 
-## 📐 System Architecture
+**Expected output:** Senior dogs can benefit from regular, lower-impact activity such as shorter walks. The amount should be adjusted to mobility, health, weather, and signs of fatigue.
 
-The final UML diagram for PawPal+ is saved in [diagrams/uml_final.mmd](diagrams/uml_final.mmd) and rendered below.
+**Expected source:** Curated dog-exercise guidance in the local knowledge base.
 
-![PawPal+ UML diagram](diagrams/uml_final.png)
+### Example 3: Emergency guardrail
 
-## ✨ Features
+**Input:** `My dog cannot breathe. What should I do?`
 
-PawPal+ combines a small scheduling engine with a simple Streamlit interface so a pet owner can quickly organize daily care.
+**Expected output:** This may be an emergency. Contact an emergency veterinarian immediately. PawPal+ cannot diagnose or replace veterinary care.
 
-- Sorting by time: `Scheduler.sort_by_time()` orders tasks chronologically so the schedule is easy to follow.
-- Priority-based planning: `Scheduler.organize_tasks()` ranks tasks by importance, duration, and planned time.
-- Conflict warnings: `Scheduler.detect_conflicts()` highlights overlapping appointments before they become a problem.
-- Recurring tasks: `Task.mark_complete()` and `Pet.complete_task()` create the next daily or weekly occurrence automatically.
-- Pet-specific filtering: the UI lets users view appointments for one pet or for all pets at once.
-- Beginner-friendly dashboard: `app.py` presents metrics, a bar chart, and a clean schedule table for fast review.
+## Design Decisions and Trade-offs
 
-## 📸 Demo Walkthrough
+- **Dog-only scope:** Supporting one species keeps the knowledge base focused and makes the three-hour MVP easier to test.
+- **Local curated knowledge base:** Local records are reproducible and easy to inspect. The trade-off is limited topic coverage.
+- **Simple transparent retrieval:** Keyword-based scoring is faster to build and easier to test than a vector database. It may miss synonyms or differently worded questions.
+- **LLM for explanation, rules for safety:** The LLM creates readable responses, while deterministic code handles emergency and medication guardrails.
+- **Human confirmation:** AI suggestions are informational and are never automatically added to the schedule or treated as medical decisions.
 
-Follow this quick workflow to see the scheduler in action:
+## Reliability and Testing Summary
 
-1. Start the app with `streamlit run app.py`.
-2. Enter the owner and pet information, then add a pet to the owner profile.
-3. Add one or more appointments such as walks, feeding, grooming, or vet visits.
-4. Review the scheduler overview to see sorted upcoming tasks, pet-specific filtering, and any conflict warnings.
-5. Run `python3 main.py` to see the same scheduling logic in the terminal, including sorted tasks, pending items, and recurring-task behavior.
+The final project uses three reliability mechanisms:
 
-A typical example workflow looks like this:
+1. Automated tests for retrieval, empty input, emergency detection, medication safety, unsupported questions, and source output.
+2. Logging for retrieval choices, guardrail events, successful responses, and API failures.
+3. Structured human evaluation in [`docs/evaluation_results.md`](docs/evaluation_results.md).
 
-- Add a pet such as Mochi
-- Add care tasks with times and durations
-- View the sorted schedule in the UI
-- Confirm whether any conflicts need attention before finalizing the day
+**Current verification:** All 24 scheduler and AI test functions passed by direct execution, and Python syntax compilation passed. This workspace does not include `pytest`, so a standard `python -m pytest -q` run remains pending after dependency installation. Human evaluation and real LLM sample-output review also remain pending.
 
-Sample CLI output from running `main.py`:
+## Reflection
 
-```text
-Today's Schedule
-====================
-- 08:00 - 08:30 : Morning walk (30 min)
-- 08:30 - 08:40 : Feeding (10 min)
-- 08:40 - 08:50 : Brush (10 min)
-- 08:50 - 09:05 : Brush (15 min)
-- 09:05 - 09:25 : Grooming (20 min)
-- 09:25 - 09:40 : Play time (15 min)
+This project showed me the difference between deterministic software logic and an applied AI system. The original PawPal+ scheduler follows rules I wrote, while the new RAG feature retrieves evidence and uses an LLM to create a context-sensitive response. I also learned that a useful AI feature needs boundaries, visible sources, failure handling, and evaluation—not only a model call.
 
-Sorted tasks by time:
-- 08:00 : Feeding
-- 09:15 : Grooming
-- 09:15 : Brush
-- 10:30 : Morning walk
+The graded responsible-AI reflection, including AI collaboration, one helpful suggestion, one flawed suggestion, and system limitations, is documented in [`model_card.md`](model_card.md).
 
-Pending tasks for Mochi:
-- Feeding
-- Grooming
-- Brush
-- Morning walk
+## Limitations
 
-Warning: conflict detected for Mochi between Brush and another task at the same time.
+- The system supports dogs only.
+- The local knowledge base covers a limited set of routine-care topics.
+- Keyword retrieval may fail when the user's wording differs from stored keywords.
+- LLM output can still be incomplete or misleading even when context is provided.
+- PawPal+ is not a veterinarian and does not diagnose, prescribe, or determine medication dosage.
+- Emergency warnings depend on a limited set of phrases and cannot identify every urgent situation.
 
-Next recurring task created: Morning walk due 2026-07-08 23:55:58.799605
-```
+## Responsible Use
+
+PawPal+ provides general educational information. Users should verify important decisions with a qualified veterinarian and seek immediate professional help for emergencies.

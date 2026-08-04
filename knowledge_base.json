@@ -1,0 +1,66 @@
+[
+  {
+    "id": "feeding_schedule",
+    "topic": "feeding routine",
+    "keywords": ["feed", "feeding", "meal", "meals", "puppy", "adult", "senior", "schedule"],
+    "content": "Use a consistent feeding schedule. Many adult dogs are fed in two measured meals each day, while puppies often need more frequent meals. The appropriate amount and schedule depend on age, body condition, activity, health, and the food's calorie content. Follow the food label and ask a veterinarian for an individualized recommendation.",
+    "source": "AAHA Nutrition and Weight Management Guidelines",
+    "source_url": "https://www.aaha.org/resources/2021-aaha-nutrition-and-weight-management-guidelines/"
+  },
+  {
+    "id": "food_xylitol",
+    "topic": "xylitol food safety",
+    "keywords": ["xylitol", "birch sugar", "gum", "candy", "toothpaste", "poison", "toxic"],
+    "content": "Xylitol is poisonous to dogs and may appear in sugar-free gum, candy, baked goods, toothpaste, medicine, and some nut butters. If a dog may have eaten xylitol, contact a veterinarian, emergency clinic, or animal poison control center immediately.",
+    "source": "U.S. Food and Drug Administration — Paws Off Xylitol",
+    "source_url": "https://www.fda.gov/consumers/consumer-updates/paws-xylitol-its-dangerous-dogs"
+  },
+  {
+    "id": "food_chocolate",
+    "topic": "chocolate food safety",
+    "keywords": ["chocolate", "cocoa", "candy", "eat", "ate", "food", "toxic", "poison"],
+    "content": "Chocolate can be dangerous to dogs. Risk varies with the type and amount of chocolate and the dog's size. A suspected ingestion should be discussed promptly with a veterinarian or animal poison control rather than treated with a home remedy.",
+    "source": "Merck Veterinary Manual — Chocolate Toxicosis in Animals",
+    "source_url": "https://www.merckvetmanual.com/toxicology/food-hazards/chocolate-toxicosis-in-animals"
+  },
+  {
+    "id": "exercise_general",
+    "topic": "exercise and walking",
+    "keywords": ["exercise", "walk", "walking", "activity", "active", "play", "senior", "puppy"],
+    "content": "Exercise should be adjusted to the individual dog's age, body condition, health, mobility, breed traits, and weather. Regular activity supports a healthy weight. Senior dogs may benefit from shorter, lower-impact sessions and breaks; stop and seek veterinary guidance if activity causes pain, collapse, or unusual breathing difficulty.",
+    "source": "AAHA Preventive Healthcare for Pets",
+    "source_url": "https://www.aaha.org/resources/preventive-healthcare-for-pets/"
+  },
+  {
+    "id": "bathing_grooming",
+    "topic": "bathing and grooming",
+    "keywords": ["bath", "bathe", "bathing", "wash", "groom", "grooming", "brush", "brushing", "coat", "fur"],
+    "content": "Brush dogs regularly to help keep the coat clean and reduce shedding. Bathing needs vary with coat, activity, skin health, and how dirty the dog becomes; many healthy dogs need only occasional baths. Use dog-safe products and ask a veterinarian about persistent itching, odor, or skin irritation.",
+    "source": "ASPCA General Dog Care",
+    "source_url": "https://www.aspca.org/pet-care/dog-care/general-dog-care"
+  },
+  {
+    "id": "dental_care",
+    "topic": "dental care",
+    "keywords": ["tooth", "teeth", "dental", "mouth", "gums", "breath", "brush", "toothpaste"],
+    "content": "Daily brushing with pet-specific toothpaste is the best home method for reducing plaque. Never use human toothpaste. Bad breath, red gums, drooling, facial swelling, or difficulty eating should be evaluated by a veterinarian.",
+    "source": "AAHA — Your Pet's Dental Care",
+    "source_url": "https://www.aaha.org/resources/your-pets-dental-care/"
+  },
+  {
+    "id": "enrichment",
+    "topic": "mental enrichment",
+    "keywords": ["bored", "boredom", "enrichment", "mental", "toy", "toys", "training", "sniff", "puzzle", "play"],
+    "content": "Dogs benefit from safe mental enrichment such as sniffing walks, short reward-based training sessions, food puzzles used with supervision, and rotating suitable toys. Activities should match the dog's age, mobility, behavior, and dietary needs.",
+    "source": "ASPCA General Dog Care",
+    "source_url": "https://www.aspca.org/pet-care/dog-care/general-dog-care"
+  },
+  {
+    "id": "preventive_care",
+    "topic": "preventive veterinary care",
+    "keywords": ["vet", "veterinarian", "checkup", "exam", "vaccine", "vaccination", "preventive", "weight", "health"],
+    "content": "Routine veterinary wellness visits help assess weight, body condition, nutrition, exercise, dental health, vaccination needs, and parasite prevention. The appropriate schedule and recommendations depend on the individual dog's life stage and risk factors.",
+    "source": "AAHA — Essential Care: Why Wellness Visits Matter",
+    "source_url": "https://www.aaha.org/resources/essential-care-why-wellness-visits-matter-for-pets/"
+  }
+]

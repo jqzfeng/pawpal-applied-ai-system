@@ -1,0 +1,11 @@
+flowchart TD
+    A["User question + dog profile"] --> B["Input guardrails"]
+    B -->|Emergency or medication| C["Safety response"]
+    B -->|Routine-care question| D["Local knowledge retriever"]
+    D -->|Relevant records| E["Grounded LLM prompt"]
+    D -->|No reliable context| F["Insufficient-information response"]
+    E --> G["Answer + sources + disclaimer"]
+    G --> H["Human reviews output"]
+    I["Automated tests + human evaluation"] --> B
+    I --> D
+    I --> G
