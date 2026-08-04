@@ -99,25 +99,28 @@ python -m pytest -q
 
 ### Example 1: Feeding routine
 
-**Input:** `How often should I feed my adult dog?`
-
-**Output example:** `Adult dogs are commonly fed on a consistent schedule, often with two meals per day. Exact needs depend on the dog’s size, activity level, and health. Follow the food label and your veterinarian’s advice.`
+```text
+Input: How often should I feed my adult dog?
+Output: Adult dogs are commonly fed on a consistent schedule, often with two meals per day. Exact needs depend on the dog’s size, activity level, and health. Follow the food label and your veterinarian’s advice.
+```
 
 **Why it matters:** This shows the AI using local care guidance to answer a routine feeding question.
 
 ### Example 2: Exercise guidance
 
-**Input:** `How much exercise does an adult dog need?`
-
-**Output example:** `Most adult dogs benefit from at least 30 minutes to one hour of daily activity. The exact amount depends on breed, age, and health, and it should be adjusted for weather and fatigue.`
+```text
+Input: How much exercise does an adult dog need?
+Output: Most adult dogs benefit from at least 30 minutes to one hour of daily activity. The exact amount depends on breed, age, and health, and it should be adjusted for weather and fatigue.
+```
 
 **Why it matters:** This demonstrates retrieval of exercise guidance plus a human-friendly explanation.
 
 ### Example 3: Emergency guardrail
 
-**Input:** `My dog cannot breathe. What should I do?`
-
-**Output example:** `This may be an emergency. Contact an emergency veterinarian immediately. PawPal+ cannot diagnose or replace professional veterinary care.`
+```text
+Input: My dog cannot breathe. What should I do?
+Output: This may be an emergency. Contact an emergency veterinarian immediately. PawPal+ cannot diagnose or replace professional veterinary care.
+```
 
 **Why it matters:** This proves the system can safely redirect urgent questions rather than generating unsafe medical advice.
 
@@ -137,8 +140,9 @@ The project uses multiple reliability mechanisms:
 - Automated tests for retrieval, empty input, emergency detection, medication safety, unsupported questions, and source output.
 - Logging for retrieval choices, guardrail events, successful responses, and OpenAI API failures.
 - Structured human evaluation in [`docs/evaluation_results.md`](docs/evaluation_results.md).
+- Reproducible command output in [`docs/demo_output.md`](docs/demo_output.md).
 
-**Current verification:** `python3 -m pytest -q` was executed successfully with 24 tests passing. The Streamlit app and live OpenAI API integration were both verified successfully, and both tabs work correctly. Six human UI smoke tests were run and passed; four remaining structured evaluation cases are still TBD.
+**Current verification:** `python3 -m pytest -q` was executed successfully with 24 tests passing. The Streamlit app and live OpenAI API integration were both verified successfully, and both tabs work correctly. Six human UI smoke tests were run and passed; all 10 structured evaluation cases are now documented.
 
 ## Reflection
 
