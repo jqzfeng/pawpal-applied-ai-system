@@ -103,6 +103,20 @@ Export the environment variable required by the selected LLM provider. Do not co
 export OPENAI_API_KEY="your-api-key"
 ```
 
+### 4.1 Make the AI search work
+
+When network access is available, install the OpenAI Python package:
+
+```bash
+pip install openai
+```
+
+Then set your API key in the shell:
+
+```bash
+export OPENAI_API_KEY="your-api-key"
+```
+
 If the OpenAI SDK is not installed or network access is restricted, the app can still attempt a direct HTTP request to the OpenAI Responses API as a fallback.
 
 ### 5. Run the application
