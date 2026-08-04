@@ -69,10 +69,12 @@ Automated and human-evaluation results should be copied here after the final imp
 
 - Automated test functions passed in direct workspace execution: **24**
 - Automated test functions total: **24**
-- Full `pytest` run after dependency installation: **TBD**
-- Human evaluation passed: **TBD**
-- Human evaluation total: **TBD**
-- Main observed failure mode: **TBD**
+- Full `pytest` run after dependency installation: **24 passed**
+- Human evaluation completed: **6 passed / 6 run**
+- Human evaluation total cases: **10**
+- Remaining structured evaluation cases: **4 TBD**
+- Main observed failure mode: **None observed in the six completed smoke tests**
+- Change made after evaluation: **Updated documentation to reflect verified pytest, Streamlit, and human UI results.**
 
 ## Ethical and Responsible-AI Considerations
 

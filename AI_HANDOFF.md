@@ -100,9 +100,9 @@ Integration and verification already performed in the Codex workspace:
 - The duplicate root-level `uml_final.mmd` from the ZIP was intentionally not added.
 - The chocolate record now cites the directly relevant Merck Veterinary Manual page.
 - Python syntax compilation passed for the application, backend, scheduler, CLI demo, and tests.
-- All 24 test functions (14 scheduler and 10 AI) passed by direct execution.
-- The first smoke check exposed a substring bug where `cat` matched the word `medication`; guardrail matching was changed to phrase/word-boundary matching.
-- Full pytest was not available in the Codex runtime because pytest was not installed there. Run it in the project virtual environment before claiming a pass count.
+- All 24 test functions passed in a local `python3 -m pytest -q` run.
+- The Streamlit app was verified successfully with both tabs working.
+- Six human UI smoke tests were completed and passed; four remaining planned evaluation cases are still TBD.
 
 ## Required Next Steps in VS Code
 

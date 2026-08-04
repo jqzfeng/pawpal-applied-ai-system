@@ -173,7 +173,7 @@ The final project uses three reliability mechanisms:
 2. Logging for retrieval choices, guardrail events, successful responses, and API failures.
 3. Structured human evaluation in [`docs/evaluation_results.md`](docs/evaluation_results.md).
 
-**Current verification:** All 24 scheduler and AI test functions passed by direct execution, and Python syntax compilation passed. This workspace does not include `pytest`, so a standard `python -m pytest -q` run remains pending after dependency installation. Human evaluation and real LLM sample-output review also remain pending.
+**Current verification:** `python3 -m pytest -q` was executed successfully with 24 tests passing. The Streamlit app was verified and both tabs work correctly. Six human UI smoke tests were run and passed; four remaining structured evaluation cases are still TBD.
 
 ## Reflection
 
