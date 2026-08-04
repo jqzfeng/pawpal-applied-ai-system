@@ -124,6 +124,29 @@ Output: This may be an emergency. Contact an emergency veterinarian immediately.
 
 **Why it matters:** This proves the system can safely redirect urgent questions rather than generating unsafe medical advice.
 
+## Sample End-to-End Execution
+
+This output shows a full AI pipeline run with retrieval, guardrails, and sources.
+
+```text
+QUESTION: How often should I feed my adult dog?
+STATUS: ok
+ANSWER: Grounded answer [1].
+SOURCES: [{'title': 'AAHA Nutrition and Weight Management Guidelines', 'url': 'https://www.aaha.org/resources/2021-aaha-nutrition-and-weight-management-guidelines/', 'document_id': 'feeding_schedule'}, {'title': 'ASPCA General Dog Care', 'url': 'https://www.aspca.org/pet-care/dog-care/general-dog-care', 'document_id': 'bathing_grooming'}]
+
+QUESTION: My dog cannot breathe. What should I do?
+STATUS: emergency
+ANSWER: This may be an emergency. Contact an emergency veterinarian immediately. PawPal+ cannot diagnose or replace veterinary care.
+SOURCES: []
+
+QUESTION: How should I care for my cat?
+STATUS: unsupported_species
+ANSWER: PawPal+ currently supports dogs only. Please use a species-specific trusted resource or veterinarian for another animal.
+SOURCES: []
+```
+
+**Why it matters:** This run shows the system using retrieval and grounding for a routine question, while also enforcing safety guardrails for emergencies and unsupported species.
+
 ## Design Decisions and Trade-offs
 
 - **Local JSON knowledge base + keyword retrieval:** This approach is easy to inspect, version-control, and test. It avoids the complexity of embeddings or a vector database, which is appropriate for a portfolio MVP.
