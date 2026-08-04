@@ -16,7 +16,7 @@ This final project extends that scheduler with an AI-powered, retrieval-augmente
 
 PawPal+ uses a small local dog-care knowledge base and a transparent retrieval process:
 
-1. The user enters a dog profile and a care question.
+1. The user selects a dog from the schedule and optionally edits that dog's profile.
 2. Input guardrails check for emergencies, medication-dose requests, and empty input.
 3. The retriever selects the most relevant dog-care records from the local knowledge base.
 4. The retrieved records, dog profile, and question are added to the LLM prompt.
@@ -102,6 +102,8 @@ Export the environment variable required by the selected LLM provider. Do not co
 ```bash
 export OPENAI_API_KEY="your-api-key"
 ```
+
+If the OpenAI SDK is not installed or network access is restricted, the app can still attempt a direct HTTP request to the OpenAI Responses API as a fallback.
 
 ### 5. Run the application
 

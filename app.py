@@ -130,20 +130,66 @@ def render_schedule_tab() -> None:
 
 def render_ai_guide_tab() -> None:
     """Render the retrieval-augmented dog-care guide."""
+    initialize_schedule_state()
     st.subheader("AI Dog Care Guide")
     st.write("Ask about feeding, food safety, exercise, bathing, grooming, dental care, or enrichment.")
 
+    if "ai_profiles" not in st.session_state:
+        st.session_state.ai_profiles = {}
+
+    dog_names = [pet.name for pet in st.session_state.owner.pets]
+    selected_dog = st.selectbox(
+        "Select dog for this question",
+        dog_names or ["Mochi"],
+        index=dog_names.index(st.session_state.pet.name) if st.session_state.pet.name in dog_names else 0,
+    )
+    profile_values = st.session_state.ai_profiles.get(selected_dog, {})
+
     with st.expander("Dog profile", expanded=True):
-        dog_name = st.text_input("Name", "Mochi", key="ai_dog_name")
-        life_stage = st.selectbox("Life stage", ["Puppy", "Adult", "Senior"])
-        breed = st.text_input("Breed (optional)")
-        size = st.selectbox("Size", ["Small", "Medium", "Large"])
-        activity = st.selectbox("Activity level", ["Low", "Moderate", "High"])
-        health_notes = st.text_input("Health notes (optional)")
+        dog_name = st.text_input(
+            "Name",
+            value=profile_values.get("name", selected_dog),
+            key=f"ai_dog_name_{selected_dog}",
+        )
+        life_stage_options = ["Puppy", "Adult", "Senior"]
+        life_stage_default = profile_values.get("life stage", "Adult")
+        life_stage = st.selectbox(
+            "Life stage",
+            life_stage_options,
+            index=life_stage_options.index(life_stage_default) if life_stage_default in life_stage_options else 1,
+            key=f"ai_life_stage_{selected_dog}",
+        )
+        breed = st.text_input(
+            "Breed (optional)",
+            value=profile_values.get("breed", ""),
+            key=f"ai_breed_{selected_dog}",
+        )
+        size_options = ["Small", "Medium", "Large"]
+        size_default = profile_values.get("size", "Medium")
+        size = st.selectbox(
+            "Size",
+            size_options,
+            index=size_options.index(size_default) if size_default in size_options else 1,
+            key=f"ai_size_{selected_dog}",
+        )
+        activity_options = ["Low", "Moderate", "High"]
+        activity_default = profile_values.get("activity level", "Moderate")
+        activity = st.selectbox(
+            "Activity level",
+            activity_options,
+            index=activity_options.index(activity_default) if activity_default in activity_options else 1,
+            key=f"ai_activity_{selected_dog}",
+        )
+        health_notes = st.text_input(
+            "Health notes (optional)",
+            value=profile_values.get("health notes", ""),
+            key=f"ai_health_notes_{selected_dog}",
+        )
 
     question = st.text_area(
         "Your question",
         placeholder="How much exercise does my senior dog need?",
+        key="ai_question",
     )
     if st.button("Ask PawPal+", type="primary"):
         profile = {
@@ -154,6 +200,7 @@ def render_ai_guide_tab() -> None:
             "activity level": activity,
             "health notes": health_notes,
         }
+        st.session_state.ai_profiles[selected_dog] = profile
         with st.spinner("Retrieving dog-care guidance..."):
             result = answer_question(question, profile)
 

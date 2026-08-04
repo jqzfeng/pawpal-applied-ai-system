@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import re
+import urllib.request
 from pathlib import Path
 from typing import Callable, Optional
 
@@ -117,20 +118,84 @@ Do not prescribe medication, calculate food portions, or replace veterinary advi
 Refer to evidence using [1] or [2]."""
 
 
-def call_openai(prompt: str) -> str:
-    """Generate an answer with the OpenAI Responses API."""
-    from openai import OpenAI
+def _call_openai_http(prompt: str) -> str:
+    """Attempt to call OpenAI via the HTTP API if the SDK is unavailable."""
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise RuntimeError(
+            "The OPENAI_API_KEY environment variable is not set. Export it before running the app."
+        )
 
-    client = OpenAI()
-    response = client.responses.create(
-        model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
-        instructions=(
+    model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+    url = "https://api.openai.com/v1/responses"
+    request_data = json.dumps({
+        "model": model,
+        "instructions": (
             "You are PawPal+, a cautious dog-care education assistant. "
             "Follow the supplied evidence and safety constraints exactly."
         ),
-        input=prompt,
+        "input": prompt,
+    }).encode("utf-8")
+    request = urllib.request.Request(
+        url,
+        data=request_data,
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}",
+        },
+        method="POST",
     )
-    return response.output_text.strip()
+
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            body = response.read().decode("utf-8")
+    except Exception as error:
+        raise RuntimeError(
+            "OpenAI HTTP API request failed. Check network access, the API key, and whether the OpenAI endpoint is reachable."
+        ) from error
+
+    try:
+        data = json.loads(body)
+    except json.JSONDecodeError as error:
+        raise RuntimeError("OpenAI response could not be decoded as JSON") from error
+
+    if "output" in data and isinstance(data["output"], dict):
+        if "text" in data["output"]:
+            return data["output"]["text"].strip()
+        if "content" in data["output"] and isinstance(data["output"]["content"], list):
+            for item in data["output"]["content"]:
+                if isinstance(item, dict) and item.get("type") == "output_text":
+                    return item.get("text", "").strip()
+    raise RuntimeError("OpenAI response did not contain expected output fields")
+
+
+def call_openai(prompt: str) -> str:
+    """Generate an answer with OpenAI. Prefer the SDK, fall back to HTTP if needed."""
+    if not os.getenv("OPENAI_API_KEY"):
+        raise RuntimeError(
+            "The OPENAI_API_KEY environment variable is not set. Export it before running the app."
+        )
+
+    try:
+        from openai import OpenAI
+        client = OpenAI()
+        response = client.responses.create(
+            model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
+            instructions=(
+                "You are PawPal+, a cautious dog-care education assistant. "
+                "Follow the supplied evidence and safety constraints exactly."
+            ),
+            input=prompt,
+        )
+        if hasattr(response, "output_text"):
+            return response.output_text.strip()
+        if hasattr(response, "output") and isinstance(response.output, dict):
+            return response.output.get("text", "").strip()
+        raise RuntimeError("OpenAI SDK response missing expected text output")
+    except ImportError:
+        return _call_openai_http(prompt)
+    except Exception as error:
+        raise RuntimeError("OpenAI SDK request failed") from error
 
 
 def answer_question(
