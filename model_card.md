@@ -22,16 +22,16 @@ PawPal+ must not be used to:
 
 1. Deterministic guardrails inspect the question.
 2. A local retriever selects relevant dog-care records.
-3. The question, dog profile, and retrieved context are sent to an LLM.
+3. The question, dog profile, and retrieved context are sent to the OpenAI API.
 4. The prompt instructs the LLM to use only the supplied context for factual care claims.
-5. The answer is returned with its sources and a disclaimer.
+5. The answer is returned with sources and a disclaimer.
 
 ## Safety and Reliability Measures
 
 - Emergency terms trigger an immediate veterinary warning before the LLM is called.
 - Medication-dose requests are declined and redirected to a veterinarian.
 - Empty questions are handled without calling the model.
-- If retrieval confidence is too low, the system states that its local information is insufficient.
+- Non-dog questions are rejected with a clear scope message.
 - Sources are displayed so users can see what information grounded the answer.
 - Logs record guardrail decisions, retrieved document identifiers, and errors without storing API keys.
 - Automated tests and structured human evaluation check expected behavior.
@@ -40,7 +40,9 @@ PawPal+ must not be used to:
 
 ### How I Collaborated With AI
 
-I used AI as a planning, coding, debugging, and documentation assistant. I first defined a small dog-only scope, selected RAG as the required advanced AI feature, and specified the expected file structure and safety behavior. I then used AI to help translate that plan into code and tests, while reviewing whether each suggestion matched the project requirements and existing PawPal+ architecture.
+I used AI as a planning, coding, debugging, and documentation assistant. I started by defining a narrow dog-only scope, then used AI to help translate that plan into code and tests while verifying whether each suggestion matched the project requirements and existing PawPal+ architecture.
+
+The AI was especially useful for drafting guardrails, structuring the prompt flow, and writing documentation that was clear across different agents.
 
 ### One Helpful AI Suggestion
 
@@ -48,30 +50,33 @@ A helpful suggestion was to use a small local knowledge base with transparent ke
 
 ### One Flawed or Inappropriate AI Suggestion
 
-An earlier direction suggested broader features such as multiple animal species, a vector database, and more automated planning behavior. Those additions were not appropriate for a three-hour MVP because they would increase implementation and testing risk without being required by the rubric. I narrowed the product to dogs and kept the AI action read-only.
+An early AI direction recommended expanding PawPal+ to support multiple animal species, use a vector database, and automate more care-planning actions. That was too much scope for an MVP and increased testing risk. I rejected that path and kept the system limited to dogs, with a simple local knowledge base and read-only AI responses.
 
-### How I Verified AI Contributions
+### Test Reliability Insight
 
-I compared suggestions against the assignment rubric, kept the original scheduler responsibilities separate from the AI module, reviewed generated code, and ran automated tests. I also used structured sample questions to manually check retrieval relevance, source display, emergency handling, and insufficient-context behavior.
+The most surprising reliability finding was how effective the guardrails were in practice. Emergency and medication inputs were caught cleanly before the model generated a response, and surfacing sources made the AI output feel more trustworthy. The more difficult task was getting the model to admit when the local knowledge base was insufficient.
 
-## Known Limitations
+## Limitations or Biases
 
-- The system's accuracy is limited by the size and quality of its local knowledge base.
-- Keyword matching is sensitive to wording and may retrieve weak context for synonyms.
-- The LLM may still generate unsupported or overconfident language.
-- Rule-based emergency detection cannot recognize every possible emergency description.
-- General advice may not fit a dog's breed, age, health, allergies, or medical history.
-- The system has not been clinically validated.
+- The system’s accuracy is limited by the size and content of the local dog-care knowledge base.
+- Keyword retrieval is sensitive to phrasing and may miss synonyms or less direct questions.
+- PawPal+ is dog-only and does not support cats or other animals.
+- It is not veterinary advice and should not be used as a medical diagnosis or prescription tool.
+- Emergency detection relies on a fixed phrase list and cannot catch every possible urgent description.
+
+## Misuse and Prevention
+
+The AI could be misused if someone treated it as professional veterinary advice. To prevent that, the system explicitly redirects medication and emergency questions to a veterinarian, displays sourcing for factual claims, and keeps the AI response layer read-only.
+
+## How I Verified AI Contributions
+
+I compared AI-generated suggestions against the assignment rubric, kept the scheduler and AI modules separate, reviewed generated code, and ran automated tests. I also used manual smoke tests and structured evaluation in `docs/evaluation_results.md` to check retrieval relevance, source display, emergency handling, and missing-context behavior.
 
 ## Evaluation Status
 
-Automated and human-evaluation results should be copied here after the final implementation is run.
-
-- Automated test functions passed in direct workspace execution: **24**
-- Automated test functions total: **24**
-- Full `pytest` run after dependency installation: **24 passed**
-- Human evaluation completed: **6 passed / 6 run**
-- Human evaluation total cases: **10**
+- Automated test functions passed: **24**
+- Structured human evaluation completed: **6 passed / 6 run**
+- Total planned evaluation cases: **10**
 - Remaining structured evaluation cases: **4 TBD**
 - Main observed failure mode: **None observed in the six completed smoke tests**
 - Change made after evaluation: **Updated documentation to reflect verified pytest, Streamlit, and human UI results.**
